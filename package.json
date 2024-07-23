@@ -6,7 +6,7 @@
   "scripts": {
     "prevstart:dev": "docker compose up -d",
     "start:dev": "tsx watch --env-file=.env ./src/server.ts",
-    "start":"tsup ./src --out-dir build",
+    "start": "tsup ./src --out-dir build",
     "build": "node build/server.js"
   },
   "keywords": [],
@@ -14,7 +14,10 @@
   "license": "ISC",
   "lincense": "MIT",
   "devDependencies": {
+    "@rocketseat/eslint-config": "^2.2.2",
     "@types/node": "^20.14.11",
+    "eslint": "8.56.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "tsup": "^8.2.2",
     "tsx": "^4.16.2",
     "typescript": "^5.5.4"
