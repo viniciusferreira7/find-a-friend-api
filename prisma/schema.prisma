@@ -12,3 +12,110 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  role          Role     @default(USER)
+  created_at    DateTime @default(now())
+
+  pet   Pet?    @relation(fields: [petId], references: [id], onDelete: SetNull)
+  petId String?
+
+  @@map("users")
+}
+
+enum Pet_age {
+  NEWBORN
+  INFANT
+  JUVENILE
+  ADOLESCENT
+  YOUNG
+  ADULT
+  MATURE
+  SENIOR
+  ELDERLY
+  GERIATRIC
+}
+
+enum Pet_size {
+  SMALL
+  MEDIUM
+  LARGE
+  EXTRA_LARGE
+}
+
+enum Pet_energy_level {
+  LOW
+  MODERATE
+  HIGH
+  VERY_HIGH
+}
+
+enum Pet_suitable_environment {
+  AMPLE_SPACE
+  SMALL_APARTMENT
+  BACKYARD
+  INDOOR
+  OUTDOOR
+  RURAL_ENVIRONMENT
+  URBAN_ENVIRONMENT
+}
+
+model Pet {
+  id                     String                   @id @default(uuid())
+  name                   String
+  description            String
+  petAge                 Pet_age                  @default(NEWBORN) @map("pet_age")
+  petImageUrl            String                   @map("pet_image_url")
+  petSpecies             String                   @map("pet_species")
+  petSize                Pet_size                 @default(SMALL) @map("pet_size")
+  petEnergyLevel         Pet_energy_level         @default(LOW) @map("pet_energy_level")
+  petSuitableEnvironment Pet_suitable_environment @default(AMPLE_SPACE) @map("pet_suitable_environment")
+
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @default(now()) @map("updated_at")
+  pet_requeriment Pet_requeriment[]
+
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organizationId String?       @map("organization_id")
+  User           User[]
+
+  @@map("pets")
+}
+
+model Pet_requeriment {
+  id   String @id @default(cuid())
+  name String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  pet   Pet    @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId String @map("pet_id")
+
+  @@map("pet_requeriments")
+}
+
+model Organization {
+  id              String @id @default(uuid())
+  managerName     String @map("manager_name")
+  email           String
+  passwordHash    String @default("password_hash")
+  cep             Int
+  address         String
+  cellPhoneNumber String @map("cell_phone_number")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  pet       Pet[]
+
+  @@map("organizations")
+}
