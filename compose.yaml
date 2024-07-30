@@ -5,9 +5,9 @@ services:
     ports:
       - 5432:5432
     environment: 
-      - POSTGRESQL_USERNAME=docker
-      - POSTGRESQL_PASSWORD=docker
-      - POSTGRESQL_DATABASE=findfriend
+      POSTGRESQL_USERNAME: docker
+      POSTGRESQL_PASSWORD: docker
+      POSTGRESQL_DATABASE: findfriend
     volumes:
       - find_a_friend_data:/bitnami/postgresql
 volumes:
