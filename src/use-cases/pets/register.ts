@@ -7,16 +7,23 @@ import {
   PetSize,
   PetSuitableEnvironment,
 } from '../../interfaces/pets'
+import { OrganizationRepository } from '../../repositories/organization-repository'
+import { PetsRepository } from '../../repositories/pets-repository'
+import { ResourceNotFound } from '../errors/resource-not-found'
 
 interface RegisterRequest {
-  name: string
-  description: string
-  age: PetAge
-  size: PetSize
-  energyLevel: PetEnergyLevel
-  independenceLevel: PetIndependenceLevel
-  suitableEnvironment: PetSuitableEnvironment
-  petImageUrl: string
+  organizationId: string
+  pet: {
+    name: string
+    description: string
+    age: PetAge
+    size: PetSize
+    species: string
+    energyLevel: PetEnergyLevel
+    independenceLevel: PetIndependenceLevel
+    suitableEnvironment: PetSuitableEnvironment
+    petImageUrl: string
+  }
 }
 
 interface RegisterResponse {
@@ -24,25 +31,34 @@ interface RegisterResponse {
 }
 
 export class Register {
+  constructor(
+    private petsRepository: PetsRepository,
+    private organizationRepository: OrganizationRepository,
+  ) {}
+
   async execute({
-    name,
-    description,
-    age,
-    size,
-    energyLevel,
-    independenceLevel,
-    suitableEnvironment,
-    petImageUrl,
+    organizationId,
+    pet,
   }: RegisterRequest): Promise<RegisterResponse> {
-    console.log({
-      name,
-      description,
-      age,
-      size,
-      energyLevel,
-      independenceLevel,
-      suitableEnvironment,
-      petImageUrl,
+    const organization = this.organizationRepository.findById(organizationId)
+
+    if (!organization) {
+      throw new ResourceNotFound()
+    }
+
+    const registeredPet = await this.petsRepository.create({
+      organizationId,
+      name: pet.name,
+      description: pet.description,
+      petAge: pet.age,
+      petSize: pet.size,
+      petSpecies: pet.species,
+      petEnergyLevel: pet.energyLevel,
+      petIndependenceLevel: pet.independenceLevel,
+      petSuitableEnvironment: pet.suitableEnvironment,
+      petImageUrl: pet.petImageUrl,
     })
+
+    return { pet: registeredPet }
   }
 }
