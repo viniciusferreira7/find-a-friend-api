@@ -20,7 +20,7 @@ enum Role {
 
 model User {
   id            String   @id @default(uuid())
-  name          String
+  name          String   @db.VarChar(100)
   email         String   @unique
   password_hash String
   role          Role     @default(USER)
@@ -59,6 +59,12 @@ enum Pet_energy_level {
   VERY_HIGH
 }
 
+enum Pet_independence_level {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 enum Pet_suitable_environment {
   AMPLE_SPACE
   SMALL_APARTMENT
@@ -71,14 +77,15 @@ enum Pet_suitable_environment {
 
 model Pet {
   id                     String                   @id @default(uuid())
-  name                   String
-  description            String
+  name                   String                   @db.VarChar(100)
+  description            String                   @db.VarChar(300)
   petAge                 Pet_age                  @default(NEWBORN) @map("pet_age")
   petImageUrl            String                   @map("pet_image_url")
   petSpecies             String                   @map("pet_species")
   petSize                Pet_size                 @default(SMALL) @map("pet_size")
   petEnergyLevel         Pet_energy_level         @default(LOW) @map("pet_energy_level")
   petSuitableEnvironment Pet_suitable_environment @default(AMPLE_SPACE) @map("pet_suitable_environment")
+  petIndependenceLevel   Pet_independence_level   @default(MEDIUM) @map("pet_independence_level")
 
   createdAt       DateTime          @default(now()) @map("created_at")
   updatedAt       DateTime          @default(now()) @map("updated_at")
@@ -93,7 +100,7 @@ model Pet {
 
 model Pet_requeriment {
   id   String @id @default(cuid())
-  name String
+  name String @db.VarChar(400)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
@@ -106,7 +113,7 @@ model Pet_requeriment {
 
 model Organization {
   id              String @id @default(uuid())
-  managerName     String @map("manager_name")
+  managerName     String @map("manager_name") @db.VarChar(100)
   email           String
   passwordHash    String @default("password_hash")
   cep             Int
