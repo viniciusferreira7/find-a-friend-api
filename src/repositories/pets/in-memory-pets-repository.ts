@@ -10,18 +10,20 @@ export class InMemoryPetsRepository implements PetsRepository {
     organizationId,
     ...pet
   }: Prisma.PetUncheckedCreateInput): Promise<Pet> {
-    const createdPet = {
+    const createdPet: Pet = {
       id: randomUUID(),
-      organizationId,
+      organizationId: organizationId ?? null,
       name: pet.name,
       description: pet.description,
-      petAge: pet.petAge,
-      petSize: pet.petSize,
+      petAge: pet.petAge!,
+      petSize: pet.petSize!,
       petSpecies: pet.petSpecies,
-      petEnergyLevel: pet.petEnergyLevel,
-      petIndependenceLevel: pet.petIndependenceLevel,
-      petSuitableEnvironment: pet.petSuitableEnvironment,
+      petEnergyLevel: pet.petEnergyLevel!,
+      petIndependenceLevel: pet.petIndependenceLevel!,
+      petSuitableEnvironment: pet.petSuitableEnvironment!,
       petImageUrl: pet.petImageUrl,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
 
     this.pets.push(createdPet)
