@@ -112,13 +112,18 @@ model Pet_requeriment {
 }
 
 model Organization {
-  id              String @id @default(uuid())
-  managerName     String @map("manager_name") @db.VarChar(100)
-  email           String
-  passwordHash    String @default("password_hash")
-  cep             Int
-  address         String
-  cellPhoneNumber String @map("cell_phone_number")
+  id           String @id @default(uuid())
+  managerName  String @map("manager_name") @db.VarChar(100)
+  email        String
+  passwordHash String @map("password_hash")
+  cep          Int
+  street       String
+  number       Int
+  complement   String
+  city         String
+  state        String
+
+  cellPhoneNumber Int @map("cell_phone_number")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")

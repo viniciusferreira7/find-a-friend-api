@@ -7,7 +7,7 @@ import {
   PetSize,
   PetSuitableEnvironment,
 } from '../../interfaces/pets'
-import { OrganizationRepository } from '../../repositories/organization-repository'
+import { OrganizationsRepository } from '../../repositories/organizations-repository'
 import { PetsRepository } from '../../repositories/pets-repository'
 import { ResourceNotFound } from '../errors/resource-not-found'
 
@@ -33,14 +33,15 @@ interface RegisterResponse {
 export class Register {
   constructor(
     private petsRepository: PetsRepository,
-    private organizationRepository: OrganizationRepository,
+    private organizationsRepository: OrganizationsRepository,
   ) {}
 
   async execute({
     organizationId,
     pet,
   }: RegisterRequest): Promise<RegisterResponse> {
-    const organization = this.organizationRepository.findById(organizationId)
+    const organization =
+      await this.organizationsRepository.findById(organizationId)
 
     if (!organization) {
       throw new ResourceNotFound()
