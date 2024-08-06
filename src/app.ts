@@ -1,10 +1,18 @@
+import fastifyScalar from '@scalar/fastify-api-reference'
 import fastify from 'fastify'
 import { ZodError } from 'zod'
 
 import { env } from './env'
 import { petsRoute } from './http/controllers/pets/route'
+import { swagger } from './lib/swagger'
 
 export const app = fastify()
+
+swagger(app)
+
+app.register(fastifyScalar, {
+  routePrefix: '/reference',
+})
 
 app.register(petsRoute)
 
