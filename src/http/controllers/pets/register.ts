@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
+import { zodToJsonSchema } from 'zod-to-json-schema'
 
 import { makeRegisterUseCase } from '@/factories/pet/make-register-use-case'
 import { ResourceNotFound } from '@/use-cases/errors/resource-not-found'
@@ -39,6 +40,8 @@ const registerBodySchema = z.object({
   independenceLevel: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   petImageUrl: z.string().url(),
 })
+
+export const registerBodyJsonSchema = zodToJsonSchema(registerBodySchema)
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const {
