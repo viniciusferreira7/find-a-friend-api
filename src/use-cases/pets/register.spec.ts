@@ -28,8 +28,8 @@ describe('Register pet', () => {
       complement: 'Suite 5B',
       city: 'Springfield',
       state: 'IL',
-      cellPhoneNumber: 13125556789,
-      cep: 26082085,
+      cellPhoneNumber: '13125556789',
+      cep: '26082085',
     })
 
     const { pet } = await sut.execute({
