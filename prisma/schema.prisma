@@ -114,7 +114,7 @@ model Pet_requeriment {
 model Organization {
   id           String @id @default(uuid())
   managerName  String @map("manager_name") @db.VarChar(100)
-  email        String
+  email        String @unique
   passwordHash String @map("password_hash")
   cep          String @db.VarChar(8)
   street       String

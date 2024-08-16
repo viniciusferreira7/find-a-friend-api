@@ -5,17 +5,17 @@ import { InMemoryOrganizationsRepository } from '@/repositories/organizations/in
 import { InMemoryPetsRepository } from '@/repositories/pets/in-memory-pets-repository'
 
 import { ResourceNotFound } from '../errors/resource-not-found'
-import { Register } from './register'
+import { RegisterUseCase } from './register'
 
 let petsRepository: InMemoryPetsRepository
 let organizationsRepository: InMemoryOrganizationsRepository
-let sut: Register
+let sut: RegisterUseCase
 
 describe('Register pet', () => {
   beforeEach(() => {
     petsRepository = new InMemoryPetsRepository()
     organizationsRepository = new InMemoryOrganizationsRepository()
-    sut = new Register(petsRepository, organizationsRepository)
+    sut = new RegisterUseCase(petsRepository, organizationsRepository)
   })
 
   it('should be able to register a pet', async () => {

@@ -11,7 +11,7 @@ import { OrganizationsRepository } from '../../repositories/organizations-reposi
 import { PetsRepository } from '../../repositories/pets-repository'
 import { ResourceNotFound } from '../errors/resource-not-found'
 
-interface RegisterRequest {
+interface RegisterUseCaseRequest {
   organizationId: string
   pet: {
     name: string
@@ -26,11 +26,11 @@ interface RegisterRequest {
   }
 }
 
-interface RegisterResponse {
+interface RegisterUseCaseResponse {
   pet: Pet
 }
 
-export class Register {
+export class RegisterUseCase {
   constructor(
     private petsRepository: PetsRepository,
     private organizationsRepository: OrganizationsRepository,
@@ -39,7 +39,7 @@ export class Register {
   async execute({
     organizationId,
     pet,
-  }: RegisterRequest): Promise<RegisterResponse> {
+  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
     const organization =
       await this.organizationsRepository.findById(organizationId)
 
