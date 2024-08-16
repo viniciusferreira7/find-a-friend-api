@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs'
 
 import { OrganizationsRepository } from '@/repositories/organizations-repository'
 
-import { OrganizationAlreadyExists } from '../errors/organization-already-exist'
+import { EmailAlreadyUsed } from '../errors/email-already-exist'
 
 interface CreateUseCaseRequest {
   managerName: string
@@ -31,7 +31,7 @@ export class CreateUseCase {
     )
 
     if (organization) {
-      throw new OrganizationAlreadyExists()
+      throw new EmailAlreadyUsed()
     }
 
     const passwordHash = await hash(data.password, 6)
