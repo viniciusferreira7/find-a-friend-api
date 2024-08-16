@@ -15,6 +15,16 @@ export class PrismaOrganizationsRepository implements OrganizationsRepository {
     return organization
   }
 
+  async findByEmail(email: string): Promise<Organization | null> {
+    const organization = await prisma.organization.findUnique({
+      where: {
+        email,
+      },
+    })
+
+    return organization
+  }
+
   async create(
     data: Prisma.OrganizationUncheckedCreateInput,
   ): Promise<Organization> {

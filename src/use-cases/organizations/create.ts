@@ -25,37 +25,28 @@ interface CreateUseCaseResponse {
 export class CreateUseCase {
   constructor(private organizationsRepository: OrganizationsRepository) {}
 
-  async execute({
-    managerName,
-    email,
-    password,
-    cep,
-    street,
-    number,
-    complement,
-    city,
-    state,
-    cellPhoneNumber,
-  }: CreateUseCaseRequest): Promise<CreateUseCaseResponse> {
-    const organization = await this.organizationsRepository.findByEmail(email)
+  async execute(data: CreateUseCaseRequest): Promise<CreateUseCaseResponse> {
+    const organization = await this.organizationsRepository.findByEmail(
+      data.email,
+    )
 
     if (organization) {
       throw new OrganizationAlreadyExists()
     }
 
-    const passwordHash = await hash(password, 6)
+    const passwordHash = await hash(data.password, 6)
 
     const createdOrganization = await this.organizationsRepository.create({
-      managerName,
-      email,
+      managerName: data.managerName,
+      email: data.email,
       passwordHash,
-      cep,
-      street,
-      number,
-      complement,
-      city,
-      state,
-      cellPhoneNumber,
+      cep: data.cep,
+      street: data.street,
+      number: data.number,
+      complement: data.complement,
+      city: data.city,
+      state: data.state,
+      cellPhoneNumber: data.cellPhoneNumber,
     })
 
     return { organization: createdOrganization }

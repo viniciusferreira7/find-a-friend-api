@@ -19,6 +19,16 @@ export class InMemoryOrganizationsRepository
     return organization
   }
 
+  async findByEmail(email: string): Promise<Organization | null> {
+    const organization = this.organizations.find((item) => item.email === email)
+
+    if (!organization) {
+      return null
+    }
+
+    return organization
+  }
+
   async create(
     data: Prisma.OrganizationUncheckedCreateInput,
   ): Promise<Organization> {
