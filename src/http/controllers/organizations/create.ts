@@ -11,11 +11,9 @@ const createBodySchema = z.object({
     .max(100, { message: 'Must be a maximum of 50 characters' }),
   email: z.string().email(),
   password: z.string().min(6, { message: 'Must have 6 or more characters' }),
-  cep: z.string().max(6, { message: 'Must have 6 or more characters' }),
+  cep: z.string().max(8, { message: 'Must have 8 or more characters' }),
   street: z.string().max(20, { message: 'Must have 20 or more characters' }),
-  number: z.coerce
-    .number()
-    .max(8, { message: 'Must have 8 or more characters' }),
+  number: z.coerce.number(),
   complement: z
     .string()
     .max(20, { message: 'Must have 20 or more characters' }),
@@ -61,7 +59,7 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(201).send()
   } catch (err) {
     if (err instanceof EmailAlreadyUsed) {
-      return reply.status(404).send({ message: err.message })
+      return reply.status(400).send({ message: err.message })
     }
   }
 }

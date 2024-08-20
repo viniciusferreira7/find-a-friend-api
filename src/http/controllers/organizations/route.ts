@@ -18,16 +18,6 @@ export async function organizationsRoute(app: FastifyInstance) {
               'Organization successfully created. No content returned.',
             type: 'null',
           },
-          404: {
-            type: 'object',
-            properties: {
-              message: {
-                type: 'string',
-                description: 'Email already used.',
-                default: 'Email already used.',
-              },
-            },
-          },
           400: {
             type: 'object',
             properties: {
