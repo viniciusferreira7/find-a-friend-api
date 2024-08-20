@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 
-import { makeRegisterUseCase } from '@/factories/pet/make-register-use-case'
+import { makeRegisterUseCase } from '@/factories/pets/make-register-use-case'
 import { ResourceNotFound } from '@/use-cases/errors/resource-not-found'
 
 const registerBodySchema = z.object({

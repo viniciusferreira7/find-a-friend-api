@@ -33,7 +33,6 @@ export class CreateUseCase {
     if (organization) {
       throw new EmailAlreadyUsed()
     }
-
     const passwordHash = await hash(data.password, 6)
 
     const createdOrganization = await this.organizationsRepository.create({
