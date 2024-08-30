@@ -87,9 +87,9 @@ model Pet {
   petSuitableEnvironment Pet_suitable_environment @default(AMPLE_SPACE) @map("pet_suitable_environment")
   petIndependenceLevel   Pet_independence_level   @default(MEDIUM) @map("pet_independence_level")
 
-  createdAt      DateTime          @default(now()) @map("created_at")
-  updatedAt      DateTime          @default(now()) @map("updated_at")
-  petRequeriment Pet_requeriment[]
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @default(now()) @map("updated_at")
+  petRequeriment PetRequeriment[]
 
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   organizationId String?       @map("organization_id")
@@ -98,7 +98,7 @@ model Pet {
   @@map("pets")
 }
 
-model Pet_requeriment {
+model PetRequeriment {
   id   String @id @default(cuid())
   name String @db.VarChar(400)
 

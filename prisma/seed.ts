@@ -1,8 +1,15 @@
 import { faker } from '@faker-js/faker'
-import { Organization } from '@prisma/client'
+import { Organization, Pet } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import chalk from 'chalk'
 
+import {
+  PetAge,
+  PetEnergyLevel,
+  PetIndependenceLevel,
+  PetSize,
+  PetSuitableEnvironment,
+} from '@/interfaces/pets'
 import { prisma } from '@/lib/prisma'
 
 async function seed() {
@@ -16,18 +23,23 @@ async function seed() {
     .map((name) => `"public"."${name}"`)
     .join(', ')
 
-  tables.split(',').forEach((tableName) => {
-    console.log(chalk.greenBright(`Trucante table: ${tableName}  ✔️`))
-  })
+  try {
+    await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables} CASCADE;`)
+    tables.split(',').forEach((tableName) => {
+      console.log(chalk.greenBright(`Trucante table: ${tableName}  ✔️`))
+    })
+  } catch (error) {
+    console.log({ error })
+  }
 
-  const organizationId = '9d656623-c105-47f4-8cad-8b8d6fb9293f'
+  // Create Organizations
 
   const dateOfCreationOfOrganization = faker.date.recent({
     days: 30,
   })
 
   const organization: Organization = {
-    id: organizationId,
+    id: faker.string.uuid(),
     managerName: 'John Doe',
     email: 'john.doe@example.org',
     passwordHash: await hash('123456', 6),
@@ -52,9 +64,7 @@ async function seed() {
           managerName: faker.person.fullName({
             firstName,
           }),
-          email: faker.internet.email({
-            firstName,
-          }),
+          email: faker.internet.email(),
           passwordHash: await hash(faker.internet.password({ length: 6 }), 6),
           cep: faker.number.int({ max: 8, min: 8 }).toString(),
           street: faker.location.street(),
@@ -73,8 +83,101 @@ async function seed() {
       }),
     )
 
-    return { organizations }
+    return faker.helpers.arrayElements(organizations, { min: 10, max: 30 })
   }
+
+  const organizations = await generateOthersOrganizations()
+
+  await prisma.organization.createMany({
+    data: [organization, ...organizations],
+  })
+
+  console.log(chalk.yellowBright('Created organizations ✔️'))
+
+  // Register Pets
+
+  function generatePets() {
+    const petAge: PetAge = faker.helpers.arrayElement([
+      'NEWBORN',
+      'INFANT',
+      'JUVENILE',
+      'ADOLESCENT',
+      'YOUNG',
+      'ADULT',
+      'MATURE',
+      'SENIOR',
+      'ELDERLY',
+      'GERIATRIC',
+    ])
+
+    const petSize: PetSize = faker.helpers.arrayElement([
+      'SMALL',
+      'MEDIUM',
+      'LARGE',
+      'EXTRA_LARGE',
+    ])
+
+    const petEnergyLevel: PetEnergyLevel = faker.helpers.arrayElement([
+      'LOW',
+      'MODERATE',
+      'HIGH',
+      'VERY_HIGH',
+    ])
+
+    const petSuitableEnvironment: PetSuitableEnvironment =
+      faker.helpers.arrayElement([
+        'AMPLE_SPACE',
+        'SMALL_APARTMENT',
+        'BACKYARD',
+        'INDOOR',
+        'OUTDOOR',
+        'RURAL_ENVIRONMENT',
+        'URBAN_ENVIRONMENT',
+      ])
+
+    const petIndependenceLevel: PetIndependenceLevel =
+      faker.helpers.arrayElement(['LOW', 'MEDIUM', 'HIGH'])
+
+    const pets: Pet[] = Array.from({ length: 120 }).map(() => {
+      const organizationId = faker.helpers.arrayElement([
+        organization.id,
+        ...organizations.map((item) => item.id),
+      ])
+
+      const petSpecies = faker.helpers.arrayElement([
+        faker.animal.dog(),
+        faker.animal.cat(),
+      ])
+
+      return {
+        id: faker.string.uuid(),
+        name: faker.person.firstName(),
+        description: faker.lorem.words({ min: 45, max: 110 }).slice(0, 300),
+        petImageUrl: faker.image.urlLoremFlickr({ category: 'animals' }),
+        petSpecies,
+        petSize,
+        petEnergyLevel,
+        petAge,
+        petSuitableEnvironment,
+        petIndependenceLevel,
+        organizationId,
+        createdAt: faker.date.recent({
+          days: 28,
+        }),
+        updatedAt: faker.date.recent({
+          days: 18,
+        }),
+      }
+    })
+
+    return pets
+  }
+
+  await prisma.pet.createMany({
+    data: generatePets(),
+  })
+
+  console.log(chalk.yellowBright('Registered pets ✔️'))
 }
 
 seed().then(() => {
