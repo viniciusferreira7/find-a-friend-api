@@ -46,6 +46,7 @@ export class InMemoryOrganizationsRepository
       cep: data.cep,
       createdAt: new Date(),
       updatedAt: new Date(),
+      role: 'ADMIN',
     }
 
     this.organizations.push(organization)

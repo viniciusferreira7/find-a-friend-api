@@ -1,3 +1,5 @@
+import fastifyCookie from '@fastify/cookie'
+import fastifyJwt from '@fastify/jwt'
 import fastifyScalar from '@scalar/fastify-api-reference'
 import fastify from 'fastify'
 import { ZodError } from 'zod'
@@ -14,6 +16,14 @@ swagger(app)
 app.register(fastifyScalar, {
   routePrefix: '/reference',
 })
+
+app.register(fastifyCookie)
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+})
+
+// app.addHook('onRequest', verifyJWT)
 
 app.register(petsRoute)
 app.register(organizationsRoute)

@@ -40,6 +40,7 @@ export class PrismaOrganizationsRepository implements OrganizationsRepository {
         state: data.state,
         cellPhoneNumber: data.cellPhoneNumber,
         cep: data.cep,
+        role: 'ADMIN',
       },
     })
 

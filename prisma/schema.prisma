@@ -15,7 +15,7 @@ datasource db {
 
 enum Role {
   ADMIN
-  USER
+  MEMBER
 }
 
 enum Pet_age {
@@ -107,6 +107,7 @@ model Organization {
   complement   String
   city         String
   state        String
+  role         Role   @default(ADMIN)
 
   cellPhoneNumber String @map("cell_phone_number") @db.VarChar(15)
 

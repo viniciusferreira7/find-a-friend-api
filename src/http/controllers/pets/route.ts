@@ -11,6 +11,7 @@ export async function petsRoute(app: FastifyInstance) {
         description:
           'Endpoint to register a new pet into the system. This endpoint allows users to provide detailed information about the pet, including its age, size, species, energy level, suitable environment, independence level, and an image URL.',
         tags: ['Pets'],
+        security: [{ jwt: [] }],
         body: registerBodyJsonSchema,
         response: {
           201: {

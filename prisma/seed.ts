@@ -52,6 +52,7 @@ async function seed() {
     cellPhoneNumber: '12345678910',
     createdAt: dateOfCreationOfOrganization,
     updatedAt: dateOfCreationOfOrganization,
+    role: 'ADMIN',
   }
 
   async function generateOthersOrganizations() {
@@ -72,6 +73,7 @@ async function seed() {
           complement: faker.location.buildingNumber(),
           city: faker.location.city(),
           state: faker.location.state(),
+          role: 'ADMIN',
           cellPhoneNumber: faker.number.int({ max: 15, min: 9 }).toString(),
           createdAt: faker.date.recent({
             days: 30,
