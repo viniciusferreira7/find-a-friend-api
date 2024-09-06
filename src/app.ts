@@ -23,8 +23,6 @@ app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
 })
 
-// app.addHook('onRequest', verifyJWT)
-
 app.register(petsRoute)
 app.register(organizationsRoute)
 

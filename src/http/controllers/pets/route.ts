@@ -1,8 +1,13 @@
 import { FastifyInstance } from 'fastify'
 
+import { verifyJWT } from '@/http/middlewares/verify-jwt'
+import { verifyUserRole } from '@/http/middlewares/verify-role'
+
 import { register, registerBodyJsonSchema } from './register'
 
 export async function petsRoute(app: FastifyInstance) {
+  app.addHook('onRequest', verifyJWT)
+
   app.post(
     '/pets',
     {
@@ -20,6 +25,21 @@ export async function petsRoute(app: FastifyInstance) {
               petId: { type: 'string' },
             },
           },
+          400: {
+            type: 'object',
+            properties: {
+              message: { type: 'array', items: { type: 'string' } },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                default: 'Invalid credentials.',
+              },
+            },
+          },
           404: {
             type: 'object',
             properties: {
@@ -30,12 +50,6 @@ export async function petsRoute(app: FastifyInstance) {
               },
             },
           },
-          400: {
-            type: 'object',
-            properties: {
-              message: { type: 'array', items: { type: 'string' } },
-            },
-          },
           500: {
             type: 'object',
             properties: {
@@ -44,6 +58,7 @@ export async function petsRoute(app: FastifyInstance) {
           },
         },
       },
+      onRequest: [verifyUserRole('ADMIN')],
     },
     register,
   )

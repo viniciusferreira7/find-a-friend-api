@@ -1,9 +1,14 @@
 import { FastifyInstance } from 'fastify'
 
+import { verifyJWT } from '@/http/middlewares/verify-jwt'
+
 import { authenticate, authenticateBodyJsonSchema } from './authenticate'
 import { create, createBodyJsonSchema } from './create'
+import { refresh } from './refresh'
 
 export async function organizationsRoute(app: FastifyInstance) {
+  app.addHook('onRequest', verifyJWT)
+
   app.post(
     '/organizations',
     {
@@ -79,5 +84,47 @@ export async function organizationsRoute(app: FastifyInstance) {
       },
     },
     authenticate,
+  )
+  app.patch(
+    '/organizations/refresh',
+    {
+      schema: {
+        summary: 'Refresh token',
+        description:
+          'This endpoint is responsible for renewing the access token (JWT) of an authenticated user. It uses the refresh token, which was previously stored in cookies, to generate a new access token without requiring the user to resubmit their credentials.',
+        tags: ['Organizations'],
+        security: [{ jwt: [] }],
+        response: {
+          201: {
+            type: 'object',
+            properties: {
+              token: { type: 'string' },
+            },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              message: { type: 'array', items: { type: 'string' } },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                default: 'Invalid credentials.',
+              },
+            },
+          },
+          500: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    refresh,
   )
 }
