@@ -86,7 +86,7 @@ export async function organizationsRoute(app: FastifyInstance) {
     authenticate,
   )
   app.patch(
-    '/organizations/refresh',
+    '/token/refresh',
     {
       schema: {
         summary: 'Refresh token',
