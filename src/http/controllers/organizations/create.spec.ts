@@ -2,6 +2,7 @@ import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '@/app'
+import { env } from '@/env'
 
 describe('Create an organization (E2E)', () => {
   beforeAll(async () => {
@@ -13,19 +14,24 @@ describe('Create an organization (E2E)', () => {
   })
 
   it('should be able to create an organization', async () => {
-    const response = await request(app.server).post('/organizations').send({
-      managerName: 'John Doe',
-      email: 'john.doe@example.org',
-      password: '123456',
-      cep: '12345678',
-      street: 'Elm Street',
-      number: 1234,
-      complement: 'Suite 5B',
-      city: 'Springfield',
-      state: 'IL',
-      cellPhoneNumber: '12345678910',
-    })
+    const response = await request(app.server)
+      .post('/organizations')
+      .set('Authorization', `Bearer ${env.APP_TOKEN}`)
+      .send({
+        managerName: 'John Doe',
+        email: 'john.doe@example.org',
+        password: '123456',
+        cep: '12345678',
+        street: 'Elm Street',
+        number: 1234,
+        complement: 'Suite 5B',
+        city: 'Springfield',
+        state: 'IL',
+        cellPhoneNumber: '12345678910',
+      })
 
     expect(response.status).toBe(201)
   })
 })
+
+// FIXME: error when run test E2E

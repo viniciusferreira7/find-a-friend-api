@@ -9,6 +9,7 @@ export const envSchema = z
     DATABASE_NAME: z.string().optional(),
     DATABASE_URL: z.string().url().optional(),
     JWT_SECRET: z.string(),
+    APP_TOKEN: z.string(),
   })
   .superRefine((data, ctx) => {
     if (process.env.CI === 'true') {
@@ -47,6 +48,13 @@ export const envSchema = z
       })
     }
     if (!data.JWT_SECRET) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'DATABASE_URL is required',
+        path: ['DATABASE_URL'],
+      })
+    }
+    if (!data.APP_TOKEN) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'DATABASE_URL is required',

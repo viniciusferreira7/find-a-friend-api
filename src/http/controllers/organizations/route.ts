@@ -15,7 +15,7 @@ export async function organizationsRoute(app: FastifyInstance) {
       schema: {
         summary: 'Create an organization',
         description:
-          'Tthis endpoint will return the access token to the organization to create a session.',
+          'This endpoint will return the access token to the organization to create a session.',
         tags: ['Organizations'],
         security: [{ jwt: [] }],
         body: createBodyJsonSchema,
@@ -53,7 +53,7 @@ export async function organizationsRoute(app: FastifyInstance) {
         security: [{ jwt: [] }],
         body: authenticateBodyJsonSchema,
         response: {
-          201: {
+          200: {
             type: 'object',
             properties: {
               token: { type: 'string' },

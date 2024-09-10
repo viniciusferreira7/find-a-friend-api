@@ -1,9 +1,8 @@
-import { hash } from 'bcryptjs'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { app } from '@/app'
-import { prisma } from '@/lib/prisma'
+import { createAndAuthenticateOrganization } from '@/utils/test/create-and-authenticate-organization'
 
 describe('Register a pet (E2E)', () => {
   beforeAll(async () => {
@@ -15,27 +14,15 @@ describe('Register a pet (E2E)', () => {
   })
 
   it('should be able to register a pet', async () => {
-    const organization = await prisma.organization.create({
-      data: {
-        managerName: 'John Doe',
-        email: 'john.doe@example.org',
-        passwordHash: await hash('123456', 6),
-        street: 'Elm Street',
-        number: 1234,
-        complement: 'Suite 5B',
-        city: 'Springfield',
-        state: 'IL',
-        cellPhoneNumber: '13125556789',
-        cep: '26082085',
-      },
-    })
+    const { organization, token } = await createAndAuthenticateOrganization(app)
 
     const response = await request(app.server)
       .post('/pets')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         organizationId: organization.id,
         pet: {
-          name: 'Buddy',
+          name: 'Buddy 1',
           description:
             'A friendly and energetic dog looking for a loving home.',
           age: 'YOUNG',
