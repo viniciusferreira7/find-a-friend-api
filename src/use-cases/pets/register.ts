@@ -53,7 +53,7 @@ export class RegisterUseCase {
       description: pet.description,
       petAge: pet.age,
       petSize: pet.size,
-      petSpecies: pet.species,
+      petSpecies: pet.species.toLocaleLowerCase('pt-BR'),
       petEnergyLevel: pet.energyLevel,
       petIndependenceLevel: pet.independenceLevel,
       petSuitableEnvironment: pet.suitableEnvironment,
