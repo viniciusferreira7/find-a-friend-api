@@ -1,13 +1,105 @@
 import { randomUUID } from 'node:crypto'
 
-import { Organization, Prisma } from '@prisma/client'
+import { Organization, Pet, Prisma } from '@prisma/client'
+
+import { PaginationRequest, PaginationResponse } from '@/interfaces/pagination'
+import {
+  PetAge,
+  PetEnergyLevel,
+  PetIndependenceLevel,
+  PetSize,
+} from '@/interfaces/pets'
 
 import { OrganizationsRepository } from '../organizations-repository'
+
+interface SearchParams extends PaginationRequest {
+  state: string
+  city: string
+  age?: PetAge
+  energyLevel?: PetEnergyLevel
+  size?: PetSize
+  species?: string
+  independenceLevel?: PetIndependenceLevel
+}
 
 export class InMemoryOrganizationsRepository
   implements OrganizationsRepository
 {
   public organizations: Organization[] = []
+  public pets: Pet[] = []
+
+  async findManyOrganizations(
+    searchParams: SearchParams,
+  ): Promise<PaginationResponse<Pet>> {
+    const organizations = this.organizations.filter((item) => {
+      const state = item.state === searchParams.state
+      const city = item.city === searchParams.city
+
+      return state && city
+    })
+
+    const petsByOrganizationId = this.pets.filter((item) => {
+      return organizations.some(
+        (organization) => organization.id === item.organizationId,
+      )
+    })
+
+    const petsFiltered = petsByOrganizationId.filter((item) => {
+      const age = searchParams.age ? item.petAge === searchParams.age : true
+      const energyLevel = searchParams.energyLevel
+        ? item.petEnergyLevel === searchParams.energyLevel
+        : true
+      const size = searchParams.size ? item.petSize === searchParams.size : true
+      const species = searchParams.species
+        ? item.petSpecies.toLocaleLowerCase('pt-BR') ===
+          searchParams.species?.toLocaleLowerCase('pt-BR')
+        : true
+      const independenceLeve = searchParams.independenceLevel
+        ? item.petIndependenceLevel === searchParams.independenceLevel
+        : true
+
+      return age && energyLevel && size && species && independenceLeve
+    })
+
+    const count = petsFiltered.length
+
+    if (searchParams.paginationDisabled) {
+      return {
+        count,
+        next: null,
+        previous: null,
+        page: 1,
+        totalPages: 1,
+        perPage: count,
+        paginationDisabled: true,
+        results: petsFiltered,
+      }
+    }
+
+    const perPage = searchParams?.perPage ?? 10
+    const currentPage = searchParams?.page ?? 1
+
+    const totalPages = Math.ceil(petsFiltered.length / perPage)
+
+    const nextPage = totalPages === currentPage ? null : currentPage + 1
+    const previousPage = currentPage === 1 ? null : currentPage - 1
+
+    const petsPaginated = petsFiltered.slice(
+      (currentPage - 1) * perPage,
+      currentPage * perPage,
+    )
+
+    return {
+      count,
+      next: nextPage,
+      previous: previousPage,
+      page: 1,
+      totalPages,
+      perPage: searchParams?.perPage ?? 10,
+      paginationDisabled: false,
+      results: petsPaginated,
+    }
+  }
 
   async findById(id: string): Promise<Organization | null> {
     const organization = this.organizations.find((item) => item.id === id)
