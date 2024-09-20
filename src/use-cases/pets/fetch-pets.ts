@@ -28,9 +28,13 @@ export class FetchPetsUseCase {
 
   async execute({
     searchParams,
+    ...pagination
   }: FetchPetsUseCaseRequest): Promise<FetchPetsUseCaseResponse> {
     const paginatedResponse =
-      await this.organizationsRepository.findManyOrganizations(searchParams)
+      await this.organizationsRepository.findManyPetsByCityOfOrganization({
+        ...searchParams,
+        ...pagination,
+      })
 
     return paginatedResponse
   }

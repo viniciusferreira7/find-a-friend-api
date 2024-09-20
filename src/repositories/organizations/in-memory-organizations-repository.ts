@@ -28,12 +28,16 @@ export class InMemoryOrganizationsRepository
   public organizations: Organization[] = []
   public pets: Pet[] = []
 
-  async findManyOrganizations(
+  async findManyPetsByCityOfOrganization(
     searchParams: SearchParams,
   ): Promise<PaginationResponse<Pet>> {
     const organizations = this.organizations.filter((item) => {
-      const state = item.state === searchParams.state
-      const city = item.city === searchParams.city
+      const state =
+        item.state.toLocaleLowerCase('pt-BR') ===
+        searchParams.state.toLocaleLowerCase('pt-BR')
+      const city =
+        item.city.toLocaleLowerCase('pt-BR') ===
+        searchParams.city.toLocaleLowerCase('pt-BR')
 
       return state && city
     })

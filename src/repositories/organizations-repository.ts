@@ -19,7 +19,7 @@ interface SearchParams extends PaginationRequest {
 }
 
 export interface OrganizationsRepository {
-  findManyOrganizations(
+  findManyPetsByCityOfOrganization(
     searchParams: SearchParams,
   ): Promise<PaginationResponse<Pet>>
   findById(id: string): Promise<Organization | null>
