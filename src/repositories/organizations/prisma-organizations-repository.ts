@@ -108,7 +108,7 @@ export class PrismaOrganizationsRepository implements OrganizationsRepository {
 
     return {
       count,
-      next: nextPage,
+      next: count <= 0 ? null : nextPage,
       previous: previousPage,
       page: currentPage,
       perPage,

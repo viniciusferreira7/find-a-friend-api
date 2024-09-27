@@ -11,10 +11,11 @@ import type {
 
 interface GeneratePets {
   organizationIds: Array<string>
+  length?: number
 }
 
-export function generatePets({ organizationIds }: GeneratePets) {
-  const pets: Pet[] = Array.from({ length: 500 }).map(() => {
+export function generatePets({ organizationIds, length }: GeneratePets) {
+  const pets: Pet[] = Array.from({ length: length ?? 500 }).map(() => {
     const petAge: PetAge = faker.helpers.arrayElement([
       'NEWBORN',
       'INFANT',

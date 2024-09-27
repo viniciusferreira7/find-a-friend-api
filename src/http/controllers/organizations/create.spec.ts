@@ -33,5 +33,3 @@ describe('Create an organization (E2E)', () => {
     expect(response.status).toBe(201)
   })
 })
-
-// FIXME: error when run test E2E
