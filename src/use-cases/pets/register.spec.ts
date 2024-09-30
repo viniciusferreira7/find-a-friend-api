@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryOrganizationsRepository } from '@/repositories/organizations/in-memory-organizations-repository'
 import { InMemoryPetsRepository } from '@/repositories/pets/in-memory-pets-repository'
 
-import { ResourceNotFound } from '../errors/resource-not-found'
+import { ResourceNotFound } from '../_errors/resource-not-found'
 import { RegisterUseCase } from './register'
 
 let petsRepository: InMemoryPetsRepository

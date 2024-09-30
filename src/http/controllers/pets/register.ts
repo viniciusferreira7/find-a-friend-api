@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 
 import { makeRegisterUseCase } from '@/factories/pets/make-register-use-case'
-import { ResourceNotFound } from '@/use-cases/errors/resource-not-found'
+import { ResourceNotFound } from '@/use-cases/_errors/resource-not-found'
 
 const registerBodySchema = z.object({
   organizationId: z.string().uuid(),

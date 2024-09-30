@@ -3,7 +3,7 @@ import { z } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 import { makeAuthenticateUseCase } from '@/factories/organizations/make-authenticate-use-case'
-import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
+import { InvalidCredentialsError } from '@/use-cases/_errors/invalid-credentials-error'
 
 const authenticateBodySchema = z.object({
   email: z.string().email(),

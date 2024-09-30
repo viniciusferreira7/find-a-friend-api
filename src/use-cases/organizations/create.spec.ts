@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { InMemoryOrganizationsRepository } from '@/repositories/organizations/in-memory-organizations-repository'
 
-import { EmailAlreadyUsed } from '../errors/email-already-exist'
+import { EmailAlreadyUsed } from '../_errors/email-already-exist'
 import { CreateUseCase } from './create'
 
 let organizationsRepository: InMemoryOrganizationsRepository

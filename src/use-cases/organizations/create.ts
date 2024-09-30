@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs'
 
 import { OrganizationsRepository } from '@/repositories/organizations-repository'
 
-import { EmailAlreadyUsed } from '../errors/email-already-exist'
+import { EmailAlreadyUsed } from '../_errors/email-already-exist'
 
 interface CreateUseCaseRequest {
   managerName: string

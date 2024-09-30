@@ -3,7 +3,7 @@ import { z } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 import { makeCreateUseCase } from '@/factories/organizations/make-create-use-case'
-import { EmailAlreadyUsed } from '@/use-cases/errors/email-already-exist'
+import { EmailAlreadyUsed } from '@/use-cases/_errors/email-already-exist'
 
 const createBodySchema = z.object({
   managerName: z

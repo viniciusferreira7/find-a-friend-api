@@ -3,7 +3,7 @@ import { compare } from 'bcryptjs'
 
 import { OrganizationsRepository } from '@/repositories/organizations-repository'
 
-import { InvalidCredentialsError } from '../errors/invalid-credentials-error'
+import { InvalidCredentialsError } from '../_errors/invalid-credentials-error'
 
 interface AuthenticateUseCaseRequest {
   email: string

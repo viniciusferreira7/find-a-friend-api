@@ -9,7 +9,7 @@ import {
 } from '../../interfaces/pets'
 import { OrganizationsRepository } from '../../repositories/organizations-repository'
 import { PetsRepository } from '../../repositories/pets-repository'
-import { ResourceNotFound } from '../errors/resource-not-found'
+import { ResourceNotFound } from '../_errors/resource-not-found'
 
 interface RegisterUseCaseRequest {
   organizationId: string
