@@ -75,7 +75,7 @@ model Pet {
 
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @default(now()) @map("updated_at")
-  petRequeriment PetRequeriment[]
+  petRequirement PetRequirement[]
 
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   organizationId String?       @map("organization_id")
@@ -83,7 +83,7 @@ model Pet {
   @@map("pets")
 }
 
-model PetRequeriment {
+model PetRequirement {
   id   String @id @default(cuid())
   name String @db.VarChar(400)
 
@@ -93,7 +93,7 @@ model PetRequeriment {
   pet   Pet    @relation(fields: [petId], references: [id], onDelete: Cascade)
   petId String @map("pet_id")
 
-  @@map("pet_requeriments")
+  @@map("pet_requirements")
 }
 
 model Organization {
