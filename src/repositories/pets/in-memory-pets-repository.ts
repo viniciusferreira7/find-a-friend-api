@@ -6,6 +6,16 @@ import { PetsRepository } from '../pets-repository'
 export class InMemoryPetsRepository implements PetsRepository {
   public pets: Pet[] = []
 
+  async findById(id: string): Promise<Pet | null> {
+    const pet = this.pets.find((pet) => pet.id === id)
+
+    if (!pet) {
+      return null
+    }
+
+    return pet
+  }
+
   async create({
     organizationId,
     ...pet

@@ -1,13 +1,15 @@
 import { type PetRequirement } from '@prisma/client'
 
-interface CreateRequest {
-  organizationId: string
-  requirement: string[]
+interface CreateManyRequest {
+  petId: string
+  requirement: Array<{
+    name: string
+  }>
 }
 
 export interface PetsRequirementRepository {
   createMany({
-    organizationId,
+    petId,
     requirement,
-  }: CreateRequest): Promise<PetRequirement[]>
+  }: CreateManyRequest): Promise<PetRequirement[]>
 }

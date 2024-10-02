@@ -4,6 +4,16 @@ import { prisma } from '../../lib/prisma'
 import { PetsRepository } from '../pets-repository'
 
 export class PrismaPetsRepository implements PetsRepository {
+  async findById(id: string): Promise<Pet | null> {
+    const pet = await prisma.pet.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    return pet
+  }
+
   async create({
     organizationId,
     ...pet
