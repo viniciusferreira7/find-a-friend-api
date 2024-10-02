@@ -9,7 +9,7 @@ const CreateManyRequirementsParamsSchema = z.object({
   petId: z.string().uuid(),
 })
 
-export const CreateManyRequirementsParamsSchemaToJson = zodToJsonSchema(
+export const createManyRequirementsParamsSchemaToJson = zodToJsonSchema(
   CreateManyRequirementsParamsSchema,
 )
 
@@ -21,7 +21,7 @@ const CreateManyRequirementsBodySchema = z.object({
   ),
 })
 
-export const CreateManyRequirementsBodySchemaToJson = zodToJsonSchema(
+export const createManyRequirementsBodySchemaToJson = zodToJsonSchema(
   CreateManyRequirementsBodySchema,
 )
 
@@ -40,6 +40,8 @@ export async function createManyRequirements(
       petId,
       requirements,
     })
+
+    return reply.status(201).send()
   } catch (err) {
     if (err instanceof ResourceNotFound) {
       return reply.status(404).send({ message: err.message })

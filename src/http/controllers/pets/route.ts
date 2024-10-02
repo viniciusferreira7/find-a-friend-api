@@ -3,6 +3,10 @@ import { FastifyInstance } from 'fastify'
 import { verifyJWT } from '@/http/middlewares/verify-jwt'
 import { verifyUserRole } from '@/http/middlewares/verify-role'
 
+import {
+  createManyRequirementsBodySchemaToJson,
+  createManyRequirementsParamsSchemaToJson,
+} from './create-many-requirements'
 import { fetchPets, fetchPetsSearchParamsSchemaToJson } from './fetch-pets'
 import { register, registerBodyJsonSchema } from './register'
 
@@ -25,6 +29,60 @@ export async function petsRoute(app: FastifyInstance) {
             properties: {
               petId: { type: 'string' },
             },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              message: { type: 'array', items: { type: 'string' } },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                default: 'Invalid credentials.',
+              },
+            },
+          },
+          404: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                description: 'Resource not found',
+                default: 'Resource not found',
+              },
+            },
+          },
+          500: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+      onRequest: [verifyUserRole('ADMIN')],
+    },
+    register,
+  )
+
+  app.post(
+    '/pets/:petId/requirement',
+    {
+      schema: {
+        summary: 'Create many requirements',
+        description: 'Endpoint to create requirements to adopt a pet',
+        tags: ['Pets', 'Pet-Requirements'],
+        security: [{ jwt: [] }],
+        querystring: createManyRequirementsParamsSchemaToJson,
+        body: createManyRequirementsBodySchemaToJson,
+        response: {
+          201: {
+            description:
+              'Requirements are successfully created. No content returned.',
+            type: 'null',
           },
           400: {
             type: 'object',
