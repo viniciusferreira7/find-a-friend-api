@@ -5,7 +5,7 @@ import type { PetsRequirementRepository } from '../pets-requirement-repository'
 
 interface CreateManyRequest {
   petId: string
-  requirement: Array<{
+  requirements: Array<{
     name: string
   }>
 }
@@ -15,9 +15,9 @@ export class InMemoryPetsRequirement implements PetsRequirementRepository {
 
   async createMany({
     petId,
-    requirement,
+    requirements,
   }: CreateManyRequest): Promise<PetRequirement[]> {
-    const requirements = requirement.map((requirement) => {
+    const createdRequirements = requirements.map((requirement) => {
       return {
         id: randomUUID(),
         name: requirement.name,
@@ -27,7 +27,7 @@ export class InMemoryPetsRequirement implements PetsRequirementRepository {
       }
     })
 
-    this.petRequirements.push(...requirements)
+    this.petRequirements.push(...createdRequirements)
 
     return this.petRequirements
   }

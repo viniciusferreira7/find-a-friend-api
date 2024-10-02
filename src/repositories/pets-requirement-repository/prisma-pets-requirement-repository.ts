@@ -6,7 +6,7 @@ import type { PetsRequirementRepository } from '../pets-requirement-repository'
 
 interface CreateManyRequest {
   petId: string
-  requirement: Array<{
+  requirements: Array<{
     name: string
   }>
 }
@@ -14,9 +14,9 @@ interface CreateManyRequest {
 export class PrismaPetsRequirement implements PetsRequirementRepository {
   async createMany({
     petId,
-    requirement,
+    requirements,
   }: CreateManyRequest): Promise<PetRequirement[]> {
-    const requirements = requirement.map((requirement) => {
+    const createdRequirements = requirements.map((requirement) => {
       return {
         name: requirement.name,
         petId,
@@ -24,7 +24,7 @@ export class PrismaPetsRequirement implements PetsRequirementRepository {
     })
 
     const petRequirements = await prisma.petRequirement.createManyAndReturn({
-      data: requirements,
+      data: createdRequirements,
     })
 
     return petRequirements

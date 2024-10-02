@@ -2,7 +2,7 @@ import { type PetRequirement } from '@prisma/client'
 
 interface CreateManyRequest {
   petId: string
-  requirement: Array<{
+  requirements: Array<{
     name: string
   }>
 }
@@ -10,6 +10,6 @@ interface CreateManyRequest {
 export interface PetsRequirementRepository {
   createMany({
     petId,
-    requirement,
+    requirements,
   }: CreateManyRequest): Promise<PetRequirement[]>
 }

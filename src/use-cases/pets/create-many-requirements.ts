@@ -9,7 +9,7 @@ import { ResourceNotFound } from '../_errors/resource-not-found'
 interface CreateManyRequirementsUseCaseRequest {
   organizationId: string
   petId: string
-  requirement: Array<{
+  requirements: Array<{
     name: string
   }>
 }
@@ -28,7 +28,7 @@ export class CreateManyRequirementsUseCase {
   async execute({
     organizationId,
     petId,
-    requirement,
+    requirements,
   }: CreateManyRequirementsUseCaseRequest): Promise<CreateManyRequirementsUseCaseResponse> {
     const organization =
       await this.organizationsRepository.findById(organizationId)
@@ -43,11 +43,13 @@ export class CreateManyRequirementsUseCase {
       throw new ResourceNotFound()
     }
 
-    const requirements = await this.petsRequirementRepository.createMany({
-      petId,
-      requirement,
-    })
+    const createdRequirements = await this.petsRequirementRepository.createMany(
+      {
+        petId,
+        requirements,
+      },
+    )
 
-    return { requirements }
+    return { requirements: createdRequirements }
   }
 }
