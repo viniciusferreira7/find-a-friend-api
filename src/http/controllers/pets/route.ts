@@ -4,6 +4,7 @@ import { verifyJWT } from '@/http/middlewares/verify-jwt'
 import { verifyUserRole } from '@/http/middlewares/verify-role'
 
 import {
+  createManyRequirements,
   createManyRequirementsBodySchemaToJson,
   createManyRequirementsParamsSchemaToJson,
 } from './create-many-requirements'
@@ -76,7 +77,7 @@ export async function petsRoute(app: FastifyInstance) {
         description: 'Endpoint to create requirements to adopt a pet',
         tags: ['Pets', 'Pet-Requirements'],
         security: [{ jwt: [] }],
-        querystring: createManyRequirementsParamsSchemaToJson,
+        params: createManyRequirementsParamsSchemaToJson,
         body: createManyRequirementsBodySchemaToJson,
         response: {
           201: {
@@ -119,7 +120,7 @@ export async function petsRoute(app: FastifyInstance) {
       },
       onRequest: [verifyUserRole('ADMIN')],
     },
-    register,
+    createManyRequirements,
   )
 
   app.get(

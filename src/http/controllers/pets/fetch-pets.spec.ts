@@ -27,7 +27,7 @@ describe('Fetch pets (E2E)', () => {
         state: [state],
         city: [city],
       },
-      length: 10,
+      length: 20,
     })
 
     const organizationsIdsCreated =
