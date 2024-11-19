@@ -13,8 +13,11 @@ interface GenerateOrganizations {
   max?: number
 }
 
-export async function generateOrganizations(params: GenerateOrganizations) {
-  if (params.passwordHashed) {
+export async function generateOrganizations({
+  passwordHashed = true,
+  ...params
+}: GenerateOrganizations) {
+  if (passwordHashed) {
     const organizations: Organization[] = await Promise.all(
       Array.from({ length: params?.length ?? 20 }).map(async () => {
         const firstName = faker.person.firstName()

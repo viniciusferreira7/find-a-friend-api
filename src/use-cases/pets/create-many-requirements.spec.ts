@@ -57,7 +57,7 @@ describe('Register pet', () => {
     const { requirements } = await sut.execute({
       organizationId: organization.id,
       petId: pet.id,
-      requirement: [
+      requirements: [
         {
           name: faker.lorem.words(5),
         },
@@ -102,7 +102,7 @@ describe('Register pet', () => {
       sut.execute({
         organizationId: 'non-id',
         petId: pet.id,
-        requirement: [
+        requirements: [
           {
             name: faker.lorem.words(5),
           },
@@ -135,7 +135,7 @@ describe('Register pet', () => {
       sut.execute({
         organizationId: organization.id,
         petId: 'non-id',
-        requirement: [
+        requirements: [
           {
             name: faker.lorem.words(5),
           },
