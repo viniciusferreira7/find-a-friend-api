@@ -133,7 +133,7 @@ export async function organizationsRoute(app: FastifyInstance) {
   )
 
   app.get(
-    'organizations/:id',
+    '/organizations/:id',
     {
       schema: {
         summary: 'Get an organization',

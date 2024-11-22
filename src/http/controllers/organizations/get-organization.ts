@@ -26,7 +26,9 @@ export async function getOrganization(
       organizationId: id,
     })
 
-    return reply.status(200).send({ organization })
+    return reply
+      .status(200)
+      .send({ organization: { ...organization, passwordHash: undefined } })
   } catch (err) {
     if (err instanceof ResourceNotFound) {
       return reply.status(401).send({ message: err.message })
