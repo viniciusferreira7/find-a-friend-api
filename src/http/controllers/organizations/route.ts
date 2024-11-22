@@ -4,6 +4,10 @@ import { verifyJWT } from '@/http/middlewares/verify-jwt'
 
 import { authenticate, authenticateBodyJsonSchema } from './authenticate'
 import { create, createBodyJsonSchema } from './create'
+import {
+  getOrganization,
+  getOrganizationParamsSchemaToJson,
+} from './get-organization'
 import { refresh } from './refresh'
 
 export async function organizationsRoute(app: FastifyInstance) {
@@ -126,5 +130,65 @@ export async function organizationsRoute(app: FastifyInstance) {
       },
     },
     refresh,
+  )
+
+  app.get(
+    'organizations/:id',
+    {
+      schema: {
+        summary: 'Get an organization',
+        description:
+          'This endpoint retrieves the details of an organization based on its ID.',
+        tags: ['Organizations'],
+        params: getOrganizationParamsSchemaToJson,
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              organization: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  managerName: { type: 'string' },
+                  email: { type: 'string' },
+                  cep: { type: 'string' },
+                  street: { type: 'string' },
+                  number: { type: 'number' },
+                  complement: { type: 'string' },
+                  city: { type: 'string' },
+                  state: { type: 'string' },
+                  role: { type: 'string', enum: ['ADMIN', 'MEMBER'] },
+                  cellPhoneNumber: { type: 'string' },
+                  createdAt: { type: 'string', format: 'date-time' },
+                  updatedAt: { type: 'string', format: 'date-time' },
+                },
+              },
+            },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              message: { type: 'array', items: { type: 'string' } },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                default: 'Invalid credentials.',
+              },
+            },
+          },
+          500: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    getOrganization,
   )
 }
