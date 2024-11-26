@@ -8,6 +8,7 @@ interface CreateManyRequest {
 }
 
 export interface PetsRequirementRepository {
+  findByPetId(petId: string): Promise<PetRequirement[]>
   createMany({
     petId,
     requirements,
