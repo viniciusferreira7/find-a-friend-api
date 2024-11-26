@@ -12,6 +12,16 @@ interface CreateManyRequest {
 }
 
 export class PrismaPetsRequirement implements PetsRequirementRepository {
+  async findByPetId(petId: string): Promise<PetRequirement[]> {
+    const requirements = await prisma.petRequirement.findMany({
+      where: {
+        petId,
+      },
+    })
+
+    return requirements
+  }
+
   async createMany({
     petId,
     requirements,
