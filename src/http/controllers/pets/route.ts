@@ -9,6 +9,7 @@ import {
   createManyRequirementsParamsSchemaToJson,
 } from './create-many-requirements'
 import { fetchPets, fetchPetsSearchParamsSchemaToJson } from './fetch-pets'
+import { getPet, GetPetParamsSchemaToJson } from './get-pet'
 import { register, registerBodyJsonSchema } from './register'
 
 export async function petsRoute(app: FastifyInstance) {
@@ -265,5 +266,122 @@ export async function petsRoute(app: FastifyInstance) {
       },
     },
     fetchPets,
+  )
+
+  app.get(
+    '/pets/:petId',
+    {
+      schema: {
+        summary: 'Get pet by id',
+        description: 'Endpoint to retrieve pet details by id',
+        tags: ['Pets'],
+        security: [{ jwt: [] }],
+        querystring: GetPetParamsSchemaToJson,
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              pet: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  name: { type: 'string' },
+                  description: { type: 'string' },
+                  petAge: {
+                    type: 'string',
+                    enum: [
+                      'NEWBORN',
+                      'INFANT',
+                      'JUVENILE',
+                      'ADOLESCENT',
+                      'YOUNG',
+                      'ADULT',
+                      'MATURE',
+                      'SENIOR',
+                      'ELDERLY',
+                      'GERIATRIC',
+                    ],
+                  },
+                  petImageUrl: { type: 'string' },
+                  petSpecies: { type: 'string' },
+                  petSize: {
+                    type: 'string',
+                    enum: ['SMALL', 'MEDIUM', 'LARGE', 'EXTRA_LARGE'],
+                  },
+                  petEnergyLevel: {
+                    type: 'string',
+                    enum: ['LOW', 'MODERATE', 'HIGH', 'VERY_HIGH'],
+                  },
+                  petSuitableEnvironment: {
+                    type: 'string',
+                    enum: [
+                      'AMPLE_SPACE',
+                      'SMALL_APARTMENT',
+                      'BACKYARD',
+                      'INDOOR',
+                      'OUTDOOR',
+                      'RURAL_ENVIRONMENT',
+                      'URBAN_ENVIRONMENT',
+                    ],
+                  },
+                  petIndependenceLevel: {
+                    type: 'string',
+                    enum: ['LOW', 'MEDIUM', 'HIGH'],
+                  },
+                  createdAt: { type: 'string' },
+                  updatedAt: { type: 'string' },
+                  organizationId: { type: 'string', nullable: true },
+                },
+                required: [
+                  'id',
+                  'name',
+                  'petAge',
+                  'petImageUrl',
+                  'petSpecies',
+                  'petSize',
+                  'createdAt',
+                  'updatedAt',
+                ],
+              },
+              requirements: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                    name: { type: 'string' },
+                    createdAt: { type: 'string' },
+                    updatedAt: { type: 'string' },
+                    petId: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            type: 'object',
+            properties: {
+              message: { type: 'array', items: { type: 'string' } },
+            },
+          },
+          401: {
+            type: 'object',
+            properties: {
+              message: {
+                type: 'string',
+                default: 'Invalid credentials.',
+              },
+            },
+          },
+          500: {
+            type: 'object',
+            properties: {
+              message: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    getPet,
   )
 }
