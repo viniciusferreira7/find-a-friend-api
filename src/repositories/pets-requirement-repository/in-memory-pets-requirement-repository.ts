@@ -13,6 +13,14 @@ interface CreateManyRequest {
 export class InMemoryPetsRequirement implements PetsRequirementRepository {
   public petRequirements: PetRequirement[] = []
 
+  async findByPetId(petId: string): Promise<PetRequirement[]> {
+    const petRequirements = this.petRequirements.filter(
+      (requirement) => requirement.petId === petId,
+    )
+
+    return petRequirements
+  }
+
   async createMany({
     petId,
     requirements,
