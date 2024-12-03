@@ -276,7 +276,7 @@ export async function petsRoute(app: FastifyInstance) {
         description: 'Endpoint to retrieve pet details by id',
         tags: ['Pets'],
         security: [{ jwt: [] }],
-        querystring: GetPetParamsSchemaToJson,
+        params: GetPetParamsSchemaToJson,
         response: {
           200: {
             type: 'object',

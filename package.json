@@ -14,7 +14,7 @@
     "test:create-environment-prisma": "pnpm link ./prisma/vitest-environment-prisma",
     "test:install-environment-prisma": "pnpm link vitest-environment-prisma",
     "pretest:e2e": "pnpm test:create-environment-prisma",
-    "test:e2e": "vitest run --dir src/http --test-timeout=12000",
+    "test:e2e": "vitest run --dir src/http/controller/ --test-timeout=12000",
     "test:e2e:watch": "vitest --dir src/http --test-timeout=12000",
     "test:coverage": "vitest run --coverage"
   },
